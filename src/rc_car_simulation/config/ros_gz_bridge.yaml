@@ -1,0 +1,46 @@
+# CLOCK
+- ros_topic_name: /clock
+  gz_topic_name: /world/world_demo/clock
+  ros_type_name: rosgraph_msgs/msg/Clock
+  gz_type_name: gz.msgs.Clock
+
+# CMD_VEL
+- ros_topic_name: /cmd_vel
+  gz_topic_name: /cmd_vel
+  ros_type_name: geometry_msgs/msg/Twist
+  gz_type_name: gz.msgs.Twist
+
+# ODOMETRY
+- ros_topic_name: /odom
+  gz_topic_name: /model/rc_car/odometry
+  ros_type_name: nav_msgs/msg/Odometry
+  gz_type_name: gz.msgs.Odometry
+
+# JOINT STATES
+- ros_topic_name: /joint_states
+  gz_topic_name: /world/world_demo/model/rc_car/joint_state
+  ros_type_name: sensor_msgs/msg/JointState
+  gz_type_name: gz.msgs.Model
+
+# IMU
+- ros_topic_name: /imu/data
+  gz_topic_name: /world/world_demo/model/rc_car/link/imu_link/sensor/imu_sensor/imu
+  ros_type_name: sensor_msgs/msg/Imu
+  gz_type_name: gz.msgs.IMU
+
+# LIDAR
+- ros_topic_name: /scan
+  gz_topic_name: /world/world_demo/model/rc_car/link/lidar_link/sensor/gpu_lidar/scan
+  ros_type_name: sensor_msgs/msg/LaserScan
+  gz_type_name: gz.msgs.LaserScan
+
+# CAMERA
+- ros_topic_name: /camera/image_raw
+  gz_topic_name: /world/world_demo/model/rc_car/link/camera_link/sensor/camera_sensor/image
+  ros_type_name: sensor_msgs/msg/Image
+  gz_type_name: gz.msgs.Image
+
+- ros_topic_name: /camera/camera_info
+  gz_topic_name: /world/world_demo/model/rc_car/link/camera_link/sensor/camera_sensor/camera_info
+  ros_type_name: sensor_msgs/msg/CameraInfo
+  gz_type_name: gz.msgs.CameraInfo

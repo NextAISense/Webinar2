@@ -1,0 +1,8 @@
+# Goal
+float32 distance_m  # positive = forward
+---
+# Result
+bool reached
+---
+# Feedback
+float32 remaining_m

@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<robot name="rc_car">
+
+  <!-- ================= LINKS ================= -->
+  <link name="base_footprint"/>
+  <link name="base_link"/>
+  <link name="camera_link"/>
+  <link name="lidar_link"/>
+  <link name="imu_link"/>
+  <link name="fn_cn1"/>
+  <link name="fn_cn2"/>
+
+  <link name="wheel_fl"/>
+  <link name="wheel_fr"/>
+  <link name="wheel_rr"/>
+  <link name="wheel_rl"/>
+
+  <!-- ================= JOINTS ================= -->
+
+
+  <!-- Base footprint joint -->
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+  </joint>
+
+  <!-- Camera -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="-0.075 0 0.195" rpy="0 0 0"/>
+  </joint>
+  
+  <!-- GPU Lidar -->
+  <joint name="lidar_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.0 0.0 0.025" rpy="0 0 0"/> 
+  </joint>
+
+  <!-- IMU -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="-0.075 0 0.085" rpy="0 0 0"/> 
+  </joint>
+
+  <!-- Front steering knuckles -->
+  <joint name="j5" type="revolute">
+    <parent link="base_link"/>
+    <child link="fn_cn1"/>
+    <origin xyz="-0.074999999999999997 0.35999999999999999 0.135000000000000001" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.52359878" upper="0.52359878" effort="2500" velocity="100"/>
+  </joint>
+
+  <joint name="j6" type="revolute">
+    <parent link="base_link"/>
+    <child link="fn_cn2"/>
+    <origin xyz="-0.074999999999999997 -0.35999999999999999 0.13500000000000001" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.52359878" upper="0.52359878" effort="2500" velocity="100"/>
+  </joint>
+
+  <!-- Front wheels -->
+  <joint name="j1" type="continuous">
+    <parent link="fn_cn1"/>
+    <child link="wheel_fl"/>
+    <origin xyz="0 0.079999902078156201 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <!-- <limit lower="-1.79769e+308" upper="1.79769e+308"/> -->
+  </joint>
+
+  <joint name="j2" type="continuous">
+    <parent link="fn_cn2"/>
+    <child link="wheel_fr"/>
+    <origin xyz="0 -0.079999902078156201 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <!-- <limit lower="-1.79769e+308" upper="1.79769e+308"/> -->
+  </joint>
+
+  <!-- Rear wheels -->
+  <joint name="j3" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_rr"/>
+    <origin xyz="-1.101 -0.44 0.13500000000000001" rpy="0 0 0"/> 
+    <axis xyz="0 1 0"/>
+    <!-- <limit lower="-1.79769e+308" upper="1.79769e+308"/> -->
+  </joint>
+
+  <joint name="j4" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_rl"/>
+    <origin xyz="-1.101 0.44 0.13500000000000001" rpy="0 0 0"/> 
+    <axis xyz="0 1 0"/>
+    <!-- <limit lower="-1.79769e+308" upper="1.79769e+308"/> -->
+  </joint>
+
+</robot>

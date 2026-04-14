@@ -1,0 +1,936 @@
+<?xml version="1.0" ?>
+<sdf version='1.7'>
+  <model name='rc_car'>
+   
+    <link name="base_footprint">
+    </link>
+    <link name='base_link'>      
+      <must_be_base_link>true</must_be_base_link>
+      <inertial>
+        <pose>-5.5136999999999997e-05 0.64776999999999996 0.10824 0 0 0</pose>
+        <mass>11.858000000000001</mass>
+        <inertia>
+          <ixx>1.8393999999999999</ixx>
+          <ixy>-0.00040467999999999998</ixy>
+          <ixz>6.3267000000000003e-05</ixz>
+          <iyy>0.63368000000000002</iyy>
+          <iyz>-0.0045383999999999997</iyz>
+          <izz>2.4211999999999998</izz>
+        </inertia>
+      </inertial>
+      <collision name='chasis_collision'>
+        <pose>0 0 0 0 0 1.570796</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='chasis_visual'>
+        <pose>0 0 0 0 0 1.570796</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/base_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.0 0.6 0.9 1</diffuse>          <!-- Bright cyan -->
+          <ambient>0.0 0.2 0.3 1</ambient>          <!-- Dimmer version to give depth -->
+          <specular>0.8 0.9 1.0 1</specular>        <!-- Strong light response -->
+          <emissive>0.02 0.05 0.1 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name="camera_link">
+      <pose relative_to='camera_joint'>0 0 0.025 0 0 0</pose>
+      <sensor name='camera_sensor' type='camera'>
+        <pose>0.09 0 0 0 0 0</pose>
+        <camera>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>true</visualize>
+        <!-- <topic>camera</topic> -->
+      </sensor>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000166667</ixx>
+          <iyy>0.000166667</iyy>
+          <izz>0.000166667</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.18 0.3 0.05</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.18 0.3 0.05</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>0.1 0.3 0.8 1</diffuse>         Metallic blue
+          <ambient>0.1 0.1 0.2 1</ambient>
+          <specular>0.5 0.5 0.5 1</specular>       Reflective
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+    <link name='lidar_link'>
+      <pose relative_to='lidar_joint'>0 0 0.05 0 0 0</pose>
+      <sensor name='gpu_lidar' type='gpu_lidar'>"
+        <pose>0 0 0 0 0 0</pose>
+        <!-- <topic>lidar</topic> -->
+        <gz_frame_id>lidar_link</gz_frame_id>
+        <update_rate>10</update_rate>
+        <ray>
+            <scan>
+                <horizontal>
+                    <samples>640</samples>
+                    <resolution>1</resolution>
+                    <min_angle>-3.141592653589793</min_angle>
+                    <max_angle>3.141592653589793</max_angle>
+                </horizontal>
+                <vertical>
+                    <samples>1</samples>
+                    <resolution>0.01</resolution>
+                    <min_angle>0</min_angle>
+                    <max_angle>0</max_angle>
+                </vertical>
+            </scan>
+            <range>
+                <min>0.08</min>
+                <max>10.0</max>
+                <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.001</stddev>
+            </noise>
+        </ray>
+        <always_on>1</always_on>
+        <visualize>true</visualize>
+      </sensor>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000145833</ixx>
+          <iyy>0.000145833</iyy>
+          <izz>0.000125</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.1</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0.8 0.3 0.1 1</diffuse>
+          <ambient>0.2 0.1 0.05 1</ambient>
+          <specular>0.5 0.5 0.5 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name='imu_link'>
+      <pose relative_to='imu_joint'>0 0 0.0025 0 0 0</pose>
+      <inertial>
+        <mass>0.05</mass>
+        <inertia>
+          <ixx>2.08333e-07</ixx>
+          <iyy>2.08333e-07</iyy>
+          <izz>2.08333e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.005 0.005 0.005</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.005 0.005 0.005</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>0.9 0.9 0.1 1</diffuse>
+          <ambient>0.3 0.3 0.05 1</ambient>
+          <specular>0.5 0.5 0.5 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+      <sensor name='imu_sensor' type='imu'>
+        <always_on>1</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <gz_frame_id>imu_link</gz_frame_id>
+        <!-- <topic>imu/data</topic> -->
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+                <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+                <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+                <bias_mean>0.0000075</bias_mean>
+                <bias_stddev>0.0000008</bias_stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.001</bias_stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+    </link>
+    <link name='wheel_rr'>
+      <pose relative_to='j3'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-5.3671999999999998e-10 0.00013823000000000001 3.7974000000000002e-10 0 0 0</pose>
+        <mass>3.6930999999999998</mass>
+        <inertia>
+          <ixx>0.023123000000000001</ixx>
+          <ixy>-4.0982000000000001e-11</ixy>
+          <ixz>-2.9877999999999999e-12</ixz>
+          <iyy>0.040842999999999997</iyy>
+          <iyz>-1.0660e-11</iyz>
+          <izz>0.023123000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='wheel_rr_collision'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_rr.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>1.0</mu2>
+                <fdir1>0 0 1</fdir1>
+              </ode>
+              <bullet>
+                <friction>0.5</friction>
+                <friction2>1</friction2>
+                <rolling_friction>0.5</rolling_friction>
+              </bullet>
+            </friction>
+          </surface>
+      </collision>
+      <visual name='wheel_rr_visual'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_rr.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.02 0.02 0.02 1</diffuse>     <!-- Very dark gray, nearly black -->
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <specular>0.1 0.1 0.1 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name='wheel_rl'>
+      <pose relative_to='j4'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>1.0954e-10 0.00013823000000000001 6.4829000000000004e-10 0 0 0</pose>
+        <mass>3.6930999999999998</mass>
+        <inertia>
+          <ixx>0.023123000000000001</ixx>
+          <ixy>-2.7371e-11</ixy>
+          <ixz>-3.6884000000000003e-12</ixz>
+          <iyy>0.040842999999999997</iyy>
+          <iyz>3.2310000000000003e-11</iyz>
+          <izz>0.023123000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='wheel_rl_collision'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_rl.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>1.0</mu2>
+                <fdir1>0 0 1</fdir1>
+              </ode>
+              <bullet>
+                <friction>0.5</friction>
+                <friction2>1</friction2>
+                <rolling_friction>0.5</rolling_friction>
+              </bullet>
+            </friction>
+          </surface>
+      </collision>
+      <visual name='wheel_rl_visual'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_rl.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.02 0.02 0.02 1</diffuse>     <!-- Very dark gray, nearly black -->
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <specular>0.1 0.1 0.1 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name='fn_cn1'>
+      <pose relative_to='j5'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.0069088999999999999 0.0041269000000000002 5.0933000000000004e-10 0 0 0</pose>
+        <mass>0.28769</mass>
+        <inertia>
+          <ixx>0.00027454999999999998</ixx>
+          <ixy>-6.6557000000000007e-05</ixy>
+          <ixz>-1.8201000000000001e-11</ixz>
+          <iyy>0.00042178000000000002</iyy>
+          <iyz>2.1946999999999999e-12</iyz>
+          <izz>0.00042441000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='fn_cn1_collision'>
+        <pose>0 0 0 0 0 1.570796</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/fn_cn1.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='fn_cn1_visual'>
+        <pose>0 0 0 0 0 1.570796</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/fn_cn1.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.9 0.4 0.1 1</diffuse>
+          <ambient>0.3 0.1 0.05 1</ambient>
+          <specular>0.4 0.2 0.1 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+
+      </visual>
+    </link>
+
+    <link name='wheel_fl'>
+      <pose relative_to='j1'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>6.4962999999999996e-10 0.00013823000000000001 -1.0123e-10 0 0 0</pose>
+        <mass>3.6930999999999998</mass>
+        <inertia>
+          <ixx>0.023123000000000001</ixx>
+          <ixy>3.1956999999999999e-11</ixy>
+          <ixz>3.8605000000000004e-12</ixz>
+          <iyy>0.040842999999999997</iyy>
+          <iyz>2.7783e-11</iyz>
+          <izz>0.023123000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='wheel_fl_collision'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_fl.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>1.0</mu2>
+                <fdir1>0 0 1</fdir1>
+              </ode>
+              <bullet>
+                <friction>0.5</friction>
+                <friction2>1</friction2>
+                <rolling_friction>0.1</rolling_friction>
+              </bullet>
+            </friction>
+          </surface>
+      </collision>
+      <visual name='wheel_fl_visual'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_fl.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.02 0.02 0.02 1</diffuse>     <!-- Very dark gray, nearly black -->
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <specular>0.1 0.1 0.1 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name='fn_cn2'>
+      <pose relative_to='j6'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>7.3412000000000003e-09 -0.0014796 1.3878e-17 0 0 0</pose>
+        <mass>0.31497000000000003</mass>
+        <inertia>
+          <ixx>0.00030714000000000002</ixx>
+          <ixy>-6.0907000000000005e-13</ixy>
+          <ixz>1.8005999999999999e-11</ixz>
+          <iyy>0.00058657999999999996</iyy>
+          <iyz>2.0396000000000001e-21</iyz>
+          <izz>0.00061996000000000002</izz>
+        </inertia>
+      </inertial>
+      <collision name='fn_cn2_collision'>
+        <pose>0 0 0 0 0 1.570796</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/fn_cn2.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='fn_cn2_visual'>
+        <pose>0 0 0 0 0 1.570796</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/fn_cn2.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.9 0.4 0.1 1</diffuse>
+          <ambient>0.3 0.1 0.05 1</ambient>
+          <specular>0.4 0.2 0.1 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name='wheel_fr'>
+      <pose relative_to='j2'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>7.6549999999999997e-11 0.00013823000000000001 6.5300000000000002e-10 0 0 0</pose>
+        <mass>3.6930999999999998</mass>
+        <inertia>
+          <ixx>0.023123000000000001</ixx>
+          <ixy>-2.8973000000000001e-11</ixy>
+          <ixz>-4.3548e-12</ixz>
+          <iyy>0.040842999999999997</iyy>
+          <iyz>3.0881000000000003e-11</iyz>
+          <izz>0.023123000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='wheel_fr_collision'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_fr.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+            <friction>
+              <ode>
+                <mu>0.5</mu>
+                <mu2>1.0</mu2>
+                <fdir1>0 0 1</fdir1>
+              </ode>
+              <bullet>
+                <friction>0.5</friction>
+                <friction2>1</friction2>
+                <rolling_friction>0.1</rolling_friction>
+              </bullet>
+            </friction>
+          </surface>
+      </collision>
+      <visual name='wheel_fr_visual'>
+        <pose>0 0 0 1.570796 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/wheel_fr.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.02 0.02 0.02 1</diffuse>     <!-- Very dark gray, nearly black -->
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <specular>0.1 0.1 0.1 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <!-- <link name='controller'>
+      <pose relative_to='j7'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-3.0530999999999998e-16 -0.025000000000000001 -1.3878e-17 0 0 0</pose>
+        <mass>0.01299</mass>
+        <inertia>
+          <ixx>4.4919000000000001e-06</ixx>
+          <ixy>-5.1209000000000002e-20</ixy>
+          <ixz>-6.6174000000000002e-24</ixz>
+          <iyy>7.9741000000000004e-07</iyy>
+          <iyz>-1.2925e-23</iyz>
+          <izz>5.0727999999999999e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name='controller_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/controller.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='controller_visual'>
+        <pose>0 0 0 0 0 0</pose> -->
+        <!-- <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/controller.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990199983 1 1 1</diffuse>
+          <ambient>0.990199983 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+
+    <link name='cn_rod'>
+      <pose relative_to='j8'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.059999999999999998 -1.2108000000000001e-15 -0.035000000000000003 0 0 0</pose>
+        <mass>0.033068</mass>
+        <inertia>
+          <ixx>8.2823000000000003e-06</ixx>
+          <ixy>-3.3385e-37</ixy>
+          <ixz>-1.6957e-05</ixz>
+          <iyy>7.6064999999999998e-05</iyy>
+          <iyz>-6.1921e-38</iyz>
+          <izz>6.8713000000000004e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='cn_rod_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/cn_rod.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='cn_rod_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/cn_rod.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990199983 1 1 1</diffuse>
+          <ambient>0.990199983 1 1 1</ambient>
+        </material>
+      </visual>
+    </link> -->
+
+    <!--<link name='copy'>
+      <pose relative_to='j9'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.056480000000000002 0.096149999999999999 1.3878e-17 0 0 0</pose>
+        <mass>0.31497000000000003</mass>
+        <inertia>
+          <ixx>0.00058657999999999996</ixx>
+          <ixy>6.0907000000000005e-13</ixy>
+          <ixz>2.0396000000000001e-21</ixz>
+          <iyy>0.00030714000000000002</iyy>
+          <iyz>-1.8005999999999999e-11</iyz>
+          <izz>0.00061996000000000002</izz>
+        </inertia>
+      </inertial>
+      <collision name='copy_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/copy.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='copy_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>meshes/copy.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990199983 1 1 1</diffuse>
+          <ambient>0.990199983 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>-->
+    <joint name='j1' type='revolute'>
+      <pose relative_to='fn_cn1'>0 0.079999902078156201 0 0 0 0</pose>
+      <parent>fn_cn1</parent>
+      <child>wheel_fl</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+          <!--<effort>0</effort>
+          <velocity>0</velocity>-->
+        </limit>
+        <!-- <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics> -->
+      </axis>
+    </joint>
+    <joint name='j2' type='revolute'>
+      <pose relative_to='fn_cn2'>0 -0.079999902078156201 0 0 0 0</pose>
+      <parent>fn_cn2</parent>
+      <child>wheel_fr</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+          <!--<effort>0</effort>
+          <velocity>0</velocity>-->
+        </limit>
+        <!-- <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics> -->
+      </axis>
+    </joint>
+    <joint name='j3' type='revolute'>
+      <pose relative_to='base_link'>-1.101 -0.44 0.13500000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>wheel_rr</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+          <!-- <effort>1000</effort>
+          <velocity>100</velocity> -->
+        </limit>
+        <!-- <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics> -->
+      </axis>
+    </joint>
+    <joint name='j4' type='revolute'>
+      <pose relative_to='base_link'>-1.101 0.44 0.13500000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>wheel_rl</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.79769e+308</lower>
+          <upper>1.79769e+308</upper>
+          <!-- <effort>1000</effort>
+          <velocity>100</velocity> -->
+        </limit>
+        <!-- <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics> -->
+      </axis>
+    </joint>
+    <joint name='j5' type='revolute'>
+      <pose relative_to='base_link'>-0.074999999999999997 0.35999999999999999 0.13500000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>fn_cn1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.52359878</lower>
+          <upper>0.52359878</upper>
+          <effort>2500.0</effort>
+          <velocity>100.0</velocity>
+        </limit>
+        <!-- <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics> -->
+      </axis>
+    </joint>
+    <joint name='j6' type='revolute'>
+      <pose relative_to='base_link'>-0.074999999999999997 -0.35999999999999999 0.13500000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>fn_cn2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.52359878</lower>
+          <upper>0.52359878</upper>
+          <effort>2500.0</effort>
+          <velocity>100.0</velocity>
+        </limit>
+        <!-- <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics> -->
+      </axis>
+    </joint>
+    <joint name='camera_joint' type='fixed'>
+      <pose relative_to='base_link'>-0.075 0 0.195 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>camera_link</child>
+    </joint>   
+    <joint name='lidar_joint' type='fixed'>
+      <pose relative_to='camera_link'>0 0 0.025 0 0 0</pose>
+      <parent>camera_link</parent>
+      <child>lidar_link</child>
+    </joint>
+    <joint name="imu_joint" type="fixed">
+      <pose relative_to="base_link">-0.075 0 0.085 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>imu_link</child>
+    </joint>
+    <joint name="base_footprint_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>base_footprint</child>
+    </joint>
+
+    <!-- <joint name='chassis_joint' type='fixed'>
+      <parent>base_link</parent>
+      <child>chassis</child>
+    </joint> -->
+    <!-- <joint name='j7' type='revolute'>
+      <pose relative_to='base_link'>-0.185 0.028850000000000001 0.20000000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>controller</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.52359878</lower>
+          <upper>0.52359878</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint> -->
+   <!-- <joint name='j8' type='revolute'>
+      <pose relative_to='controller'>0 -0.050000000000000003 0 0 0 0</pose>
+      <parent>controller</parent>
+      <child>cn_rod</child>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint> -->
+    <!-- <joint name='j9' type='revolute'>
+      <pose relative_to='cn_rod'>-0.12 0 -0.065000000000000002 0 0 0</pose>
+      <parent>cn_rod</parent>
+      <child>fn_cn2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint> -->
+
+    <!-- <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>j5</joint_name>
+      <topic>steering_joint</topic>
+      <p_gain>1</p_gain>
+      <i_gain>0.1</i_gain>
+      <d_gain>0.01</d_gain>
+      <i_max>1</i_max>
+      <i_min>-1</i_min>
+      <cmd_max>1000</cmd_max>
+      <cmd_min>-1000</cmd_min>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>j6</joint_name>
+      <topic>steering_joint_mirrored</topic>
+      <p_gain>1</p_gain>
+      <i_gain>0.1</i_gain>
+      <d_gain>0.01</d_gain>
+      <i_max>1</i_max>
+      <i_min>-1</i_min>
+      <cmd_max>1000</cmd_max>
+      <cmd_min>-1000</cmd_min>
+    </plugin>
+
+    <plugin
+        filename="gz-sim-diff-drive-system"
+        name="gz::sim::systems::DiffDrive">
+        <left_joint>j4</left_joint>
+        <right_joint>j3</right_joint>
+        <wheel_separation>0.88</wheel_separation>
+        <wheel_radius>0.135</wheel_radius>
+        <odom_publish_frequency>1</odom_publish_frequency>
+        <topic>cmd_vel</topic>
+        <topic>steering_joint</topic> -->
+        <!-- <odometryTopic>odom</odometryTopic> -->
+
+        <!-- Odometry frame, defaults to `odom`
+        <odometryFrame>odom</odometryFrame>
+    </plugin> -->
+    <plugin
+        filename="gz-sim-ackermann-steering-system"
+        name="gz::sim::systems::AckermannSteering">
+        <left_joint>j1</left_joint>
+        <left_joint>j4</left_joint>
+        <right_joint>j2</right_joint>
+        <right_joint>j3</right_joint>
+        <left_steering_joint>j5</left_steering_joint>
+        <right_steering_joint>j6</right_steering_joint>
+        <topic>cmd_vel</topic>
+        <!-- <topic>odom</topic> -->
+        <!-- <kingpin_width>1.0</kingpin_width> -->
+        <steering_limit>0.5</steering_limit>
+        <wheel_base>1.03</wheel_base>
+        <wheel_separation>0.88</wheel_separation>
+        <wheel_radius>0.135</wheel_radius>
+        <min_velocity>-100</min_velocity>
+        <max_velocity>100</max_velocity>
+        <min_acceleration>-30</min_acceleration>
+        <max_acceleration>30</max_acceleration>
+        <frame_id>odom</frame_id>
+        <child_frame_id>base_link</child_frame_id>
+      </plugin>
+      <plugin
+        filename="gz-sim-pose-publisher-system"
+        name="gz::sim::systems::PosePublisher">
+        <publish_link_pose>true</publish_link_pose>
+        <publish_sensor_pose>true</publish_sensor_pose>
+        <publish_collision_pose>false</publish_collision_pose>
+        <publish_visual_pose>false</publish_visual_pose>
+      </plugin>
+      <plugin
+        filename="gz-sim-joint-state-publisher-system"
+        name="gz::sim::systems::JointStatePublisher">
+      </plugin>
+
+
+   <!-- <plugin filename="closed_loop_plugin.py" name="closed_loop_plugin"/>-->
+  </model>
+</sdf>
