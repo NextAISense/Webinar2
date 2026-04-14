@@ -16,6 +16,12 @@
   ros_type_name: nav_msgs/msg/Odometry
   gz_type_name: gz.msgs.Odometry
 
+# TF
+- ros_topic_name: /tf
+  gz_topic_name: /model/rc_car/tf
+  ros_type_name: tf2_msgs/msg/TFMessage
+  gz_type_name: gz.msgs.Pose_V
+
 # JOINT STATES
 - ros_topic_name: /joint_states
   gz_topic_name: /world/world_demo/model/rc_car/joint_state

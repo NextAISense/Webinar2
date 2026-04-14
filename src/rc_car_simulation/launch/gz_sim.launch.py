@@ -30,12 +30,6 @@ def generate_launch_description():
         world_dir
     ]
 
-    declare_use_sim_time = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='true',
-        description='Use simulation time'
-    )
-
     bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
@@ -51,8 +45,6 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-
-        declare_use_sim_time,
 
         # Clean environment to avoid Gazebo conflicts
         UnsetEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH'),
