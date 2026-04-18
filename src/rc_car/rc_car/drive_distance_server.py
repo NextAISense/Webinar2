@@ -6,6 +6,9 @@ from rclpy.action.server import ActionServer, CancelResponse, GoalResponse
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from rc_car_interfaces.action import DriveDistance
+from copy import deepcopy
+from rclpy.executors import MultiThreadedExecutor
+
 
 FEEDBACK_HZ = 10
 LINEAR_GAIN  = 0.6           # Ratio of max speed to command
@@ -70,7 +73,7 @@ class DriveDistanceServer(Node):
             self.get_logger().warn('Waiting for odometry...')
             time.sleep(0.1)
 
-        start = self._curr_pose
+        start = deepcopy(self._curr_pose)
         remaining = abs(target)
 
         # Determine speed sign
@@ -86,7 +89,7 @@ class DriveDistanceServer(Node):
         self.get_logger().info(f'Driving {target:.2f} m ({cmd_speed:.2f} m/s)')
 
         while rclpy.ok() and not goal_handle.is_cancel_requested:
-            rclpy.spin_once(self, timeout_sec=0.01)
+            time.sleep(0.01)
 
             if self._curr_pose is None:
                 continue
@@ -124,8 +127,11 @@ class DriveDistanceServer(Node):
 def main():
     rclpy.init()
     server = DriveDistanceServer()
+    executor = MultiThreadedExecutor()
+    executor.add_node(server)
+
     try:
-        rclpy.spin(server)
+        executor.spin()
     except KeyboardInterrupt:
         server.get_logger().info('Shutting down drive server')
     finally:
